@@ -21,5 +21,5 @@ func main() {
 	userHandler := user.NewHandler(userSvc)
 
 	router.InitRouter(userHandler)
-	router.Start(fmt.Sprintf("0.0.0.0:%s", cfg.Service.Port))
+	router.Start(fmt.Sprintf("%s:%s", cfg.Service.Host, cfg.Service.Port))
 }

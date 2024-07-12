@@ -14,7 +14,8 @@ type Config struct {
 }
 
 type Service struct {
-	Port  string `yaml:"port" env-default:"8090"`
+	Port  string `yaml:"port" env-default:"8080"`
+	Host  string `yaml:"host" env-default:"0.0.0.0"`
 }
 
 type StorageConfig struct {
