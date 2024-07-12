@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/kviatkovsky/auth_service/db"
 	"github.com/kviatkovsky/auth_service/internal/config"
 	"github.com/kviatkovsky/auth_service/internal/user"
@@ -19,5 +21,5 @@ func main() {
 	userHandler := user.NewHandler(userSvc)
 
 	router.InitRouter(userHandler)
-	router.Start("0.0.0.0:8080")
+	router.Start(fmt.Sprintf("0.0.0.0:%s", cfg.Service.Port))
 }

@@ -32,7 +32,7 @@ func (r *repository) GetProfiles(ctx context.Context, username string) ([]User, 
 		INNER JOIN user_data
 		ON user.id = user_data.user_id
 	`
-	
+
 	if username != "" {
 		whereClouse := "WHERE username = ?"
 		query := fmt.Sprintf("%s %s", query, whereClouse)
@@ -61,4 +61,15 @@ func (r *repository) GetProfiles(ctx context.Context, username string) ([]User, 
 	}
 
 	return users, nil
+}
+
+func (r *repository) GetAuthByApiKey(ctx context.Context, apiKey string) (*AuthData, error) {
+	auth := AuthData{}
+	query := "SELECT id, `api-key` FROM auth WHERE `api-key` = ?"
+	err := r.db.QueryRowContext(ctx, query, apiKey).Scan(&auth.ID, &auth.ApiKey)
+	if err != nil {
+		return &AuthData{}, err
+	}
+
+	return &auth, nil
 }

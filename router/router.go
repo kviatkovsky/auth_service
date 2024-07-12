@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kviatkovsky/auth_service/internal/services/auth"
 	"github.com/kviatkovsky/auth_service/internal/user"
 )
 
@@ -15,6 +16,7 @@ var r *gin.Engine
 
 func InitRouter(userHandler *user.Handler) {
 	r = gin.Default()
+	r.Use(auth.ApiKeyAuth(userHandler))
 
 	r.GET(fmt.Sprintf("%s/profile", api_v1), userHandler.GetProfile)
 

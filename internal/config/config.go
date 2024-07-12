@@ -8,8 +8,13 @@ import (
 )
 
 type Config struct {
-	Env        string        `yaml:"env" env-default:"local"`
-	MySQL StorageConfig `yaml:"mysql"`
+	Env     string        `yaml:"env" env-default:"local"`
+	MySQL 	StorageConfig `yaml:"mysql"`
+	Service Service       `yaml:"service" env-default:"8090"`
+}
+
+type Service struct {
+	Port  string `yaml:"port" env-default:"8090"`
 }
 
 type StorageConfig struct {

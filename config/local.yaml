@@ -5,4 +5,6 @@ mysql:
   password: "root"
   database: "auth_service"
   attempts: 3
-  
+
+service:
+  port: 8080

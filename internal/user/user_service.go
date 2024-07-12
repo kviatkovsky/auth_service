@@ -44,3 +44,15 @@ func (s *service) GetProfiles(c context.Context, username string) ([]GetProfileR
 
 	return res, nil
 }
+
+func(s *service) GetAuthByApiKey(c context.Context, apiKey string) (*AuthData, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	authData, err := s.Repository.GetAuthByApiKey(ctx, apiKey)
+	if err != nil {
+		return &AuthData{}, err
+	}
+
+	return authData, nil
+}
