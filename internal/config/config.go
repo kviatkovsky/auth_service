@@ -14,7 +14,7 @@ type Config struct {
 }
 
 type Service struct {
-	Port  string `yaml:"port" env-default:"8080"`
+	Port  string
 	Host  string `yaml:"host" env-default:"0.0.0.0"`
 }
 
@@ -28,15 +28,19 @@ type StorageConfig struct {
 }
 
 func MustLoad() *Config {
-	configPath := fetchConfigPath()
-	if configPath == "" {
+	args := fetchArgs()
+	if args["config_path"] == "" {
 		panic("config path is empty")
 	}
 
-	return MustLoadPath(configPath)
+	if args["service_port"] == "" {
+		panic("config path is empty")
+	}
+
+	return MustLoadPath(args["config_path"], args["service_port"])
 }
 
-func MustLoadPath(configPath string) *Config {
+func MustLoadPath(configPath, servicePort string) *Config {
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		panic("config file does not exist: " + configPath)
 	}
@@ -47,18 +51,22 @@ func MustLoadPath(configPath string) *Config {
 		panic("cannot read config: " + err.Error())
 	}
 
+	cfg.Service.Port = servicePort
+
 	return &cfg
 }
 
-func fetchConfigPath() string {
-	var res string
+func fetchArgs() map[string]string {
+	var configPath string
+	var servicePort string
 
-	flag.StringVar(&res, "config", "", "config path")
+
+	flag.StringVar(&configPath, "config", "", "config path")
+	flag.StringVar(&servicePort, "port", "", "config path")
 	flag.Parse()
 
-	if res == "" {
-		res = os.Getenv("CONFIG_PATH")
+	return map[string]string {
+		"config_path": configPath,
+		"service_port": servicePort,
 	}
-
-	return res
 }

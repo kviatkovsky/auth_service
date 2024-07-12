@@ -4,7 +4,7 @@ ifneq (,$(wildcard .env))
 endif
 
 run:
-	go run cmd/app/main.go --config=./config/local.yaml
+	go run cmd/app/main.go --config=./config/local.yaml --port=8080
 
 migrate-db:
 	docker run -v ./db/migrations:/migrations --network host migrate/migrate -path=/migrations -database "mysql://$(DB_USER):$(DB_PASSWORD)@tcp($(DB_HOST):$(DB_PORT))/$(DB_NAME)?query" up
