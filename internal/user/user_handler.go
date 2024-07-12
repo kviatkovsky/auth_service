@@ -17,12 +17,10 @@ func NewHandler(s Service) *Handler {
 }
 
 func (h *Handler) GetProfile(c *gin.Context) {
-	c.JSON(http.StatusOK, c.Query("username"))
-
-	profile, err := h.Service.GetProfile(c, c.Query("username"))
+	profiles, err := h.Service.GetProfiles(c, c.Query("username"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	c.JSON(http.StatusOK, profile)
+	c.JSON(http.StatusOK, profiles)
 }

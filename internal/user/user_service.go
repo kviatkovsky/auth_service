@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"strconv"
 	"time"
 )
 
@@ -18,19 +17,30 @@ func NewService(repository Repository) Service {
 	}
 }
 
-func (s *service) GetProfile(c context.Context, username string) (*GetProfileRes, error) {
+func (s *service) GetProfiles(c context.Context, username string) ([]GetProfileRes, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	r, err := s.Repository.GetProfile(ctx, username)
+	profiles, err := s.Repository.GetProfiles(ctx, username)
 	if err != nil {
 		return nil, err
 	}
 
-	res := &GetProfileRes{
-		ID:       strconv.Itoa(int(r.ID)),
-		Username: r.Username,
+	res := make([]GetProfileRes, len(profiles))
+
+	for i, user := range profiles {
+		res[i] = GetProfileRes{
+			User{
+				ID:        user.ID,
+				Username:  user.Username,
+				Firstname: user.Firstname,
+				Lastname:  user.Lastname,
+				City:      user.City,
+				School:    user.School,
+			},
+		}
 	}
+
 
 	return res, nil
 }
